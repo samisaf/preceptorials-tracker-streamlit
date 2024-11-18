@@ -10,12 +10,7 @@ Once authenticated, you may navigate the available pages using the menu on the l
 """
 )
 
-# if "email" not in st.session_state:
-#     st.session_state["email"] = ""
-# if "password" not in st.session_state:
-#     st.session_state["password"] = ""
-if "access_token" not in st.session_state:
-    st.session_state["access_token"] = ""
+if "access_token" not in st.session_state: st.session_state["access_token"] = ""
 
 email = st.text_input("Enter Email")
 password = st.text_input("Enter Password", type="password")

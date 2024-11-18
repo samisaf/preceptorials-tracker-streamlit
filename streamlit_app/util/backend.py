@@ -1,11 +1,13 @@
 import requests
 import csv
+import streamlit as st
 
 # Replace these variables with your Directus instance details
 BASE_URL = 'https://preceptorial-tracker-3lwwuw7l2q-uc.a.run.app' 
 EMAIL = 'person@email.com'
 PASSWORD = 'mypassword'
 
+@st.cache_data
 def authenticate(email, password, base_url=BASE_URL):
     """Authenticate with the Directus API and return the access token."""
     auth_url = f'{base_url}/auth/login'
@@ -18,6 +20,7 @@ def authenticate(email, password, base_url=BASE_URL):
     access_token = response.json()['data']['access_token']
     return access_token
 
+@st.cache_data
 def get_teacher_users(headers, base_url=BASE_URL):
     """Retrieve users with the role of 'teacher'."""
     users_url = f'{base_url}/users'

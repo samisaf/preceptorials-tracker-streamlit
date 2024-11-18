@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 streamlit = "*"
 requests = "*"
+geopy = "*"
 
 [dev-packages]
 
