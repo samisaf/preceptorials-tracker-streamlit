@@ -2,35 +2,20 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import pydeck as pdk
-from geopy.geocoders import Nominatim
+import sys
+import os
+# adding parent directory to path in order to convert relative import to absolute import
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from util.geolocations import get_student_locations
 
-@st.cache_data()
-def get_students(access_token):
-    return pd.read_csv(f'./data/students.csv') 
-
-@st.cache_data()
-def geolocate_institutions(students):
-    """Add latitude and longitude based on the institution name if not available"""
-    result = {}
-    unique_institutions = students['institution'].dropna().unique().tolist()
-    geolocator = Nominatim(user_agent="geoapiExercises")
-    for inst in unique_institutions: 
-        location = geolocator.geocode(inst)
-        if location:
-            result[inst] = (location.latitude, location.longitude)
-    return result
+access_token = st.session_state.get("access_token", "")
+students = st.session_state.get("students", "")
 
 # Set the layout to wide mode
 st.set_page_config(layout="wide")
 
 # Display Info page
 st.title("Learners")
-
-# Retrieve the entered data
-access_token = st.session_state.get("access_token", "")
-
-# Load CSV file into a pandas DataFrame
-students = get_students(access_token)
 
 # Create tabs based on the year field
 unique_years = students['year'].unique().tolist()
@@ -47,12 +32,13 @@ for tab, year in zip(year_tabs, unique_years):
 st.subheader("Institutions Map")
 
 # Display a map of the US with dots representing each institution
-geolocations = geolocate_institutions(students)
+location_data = get_student_locations()
+
 # Convert institution_data into a list of dictionaries with 'latitude', 'longitude', and 'name' keys
-location_data = [
-    {"name": name, "latitude": location[0], "longitude": location[1]}
-    for name, location in geolocations.items()
-]
+# location_data = [
+#     {"name": name, "latitude": location[0], "longitude": location[1]}
+#     for name, location in geolocations.items()
+# ]
 
 # Pydeck chart with tooltip showing institution name on hover
 st.pydeck_chart(pdk.Deck(
@@ -82,7 +68,7 @@ st.pydeck_chart(pdk.Deck(
     }
 ))
 
-st.write(geolocations)
+st.write(location_data)
 # Ensure the user has provided a username, email, and password
 if access_token:
     st.write(f"{access_token}")
