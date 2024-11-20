@@ -16,7 +16,5 @@ if access_token:
     st.dataframe(teachers,
                  column_config={"first_name": "First Name", "last_name": "Last Name", "email": "Email",
                                 "location": "Location", })
-
-
 else:
     st.warning("Please go to the Welcome Screen to enter your information.")

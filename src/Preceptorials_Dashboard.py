@@ -1,6 +1,6 @@
 import streamlit as st
 from util.backend import authenticate, get_students, get_teachers, get_chapters
-
+import os
 # Create State Variables
 if "access_token" not in st.session_state: st.session_state["access_token"] = ""
 if "students" not in st.session_state: st.session_state["students"] = ""
@@ -24,6 +24,7 @@ if st.button("Submit") and (email and password):
     try:
         access_token = authenticate(email, password)
         st.success(f"You have been successfully authenticated.")
+        st.write(os.getcwd())
         st.session_state["access_token"] = access_token
         st.session_state["students"] = get_students(access_token)
         st.session_state["teachers"] = get_teachers(access_token)

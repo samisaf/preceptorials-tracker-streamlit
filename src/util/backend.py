@@ -1,13 +1,14 @@
 import requests
 import streamlit as st
 import pandas as pd
+import sys, os
 
 BASE_URL = 'https://preceptorial-tracker-3lwwuw7l2q-uc.a.run.app'
 
 @st.cache_data
 def authenticate(email, password, base_url=BASE_URL):
     """Authenticate with the Directus API and return the access token."""
-    return "this is a test token"
+    return "THIS IS A TEST ACCESS TOKEN"
     # auth_url = f'{base_url}/auth/login'
     # auth_payload = {
     #     'email': email,
@@ -21,7 +22,7 @@ def authenticate(email, password, base_url=BASE_URL):
 @st.cache_data
 def get_teachers(access_token, base_url=BASE_URL):
     """Retrieve users with the role of 'teacher'."""
-    return pd.read_csv(f'./data/teachers.csv')
+    return pd.read_csv(f'./src/data/teachers.csv')
     # headers = {'Authorization': f'Bearer {access_token}'}
     # users_url = f'{base_url}/users'
     # params = {
@@ -36,7 +37,7 @@ def get_teachers(access_token, base_url=BASE_URL):
 @st.cache_data
 def get_students(access_token, base_url=BASE_URL):
     """Retrieve all fields from the students table."""
-    return pd.read_csv(f'./data/students.csv')
+    return pd.read_csv(f'./src/data/students.csv')
     # headers = {'Authorization': f'Bearer {access_token}'}
     # students_url = f'../data/{base_url}/items/students'
     # params = {'fields': '*'}
@@ -49,7 +50,7 @@ def get_students(access_token, base_url=BASE_URL):
 @st.cache_data
 def get_items(access_token, item_name, base_url=BASE_URL):
     """Retrieve all fields from the students table."""
-    return pd.read_csv(f'./data/{item_name}.csv')
+    return pd.read_csv(f'./src/data/{item_name}.csv')
     # headers = {'Authorization': f'Bearer {access_token}'}
     # items_url = f'{base_url}/items/{item_name}'
     # params = {'fields': '*'}

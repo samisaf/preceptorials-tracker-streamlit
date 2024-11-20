@@ -1,6 +1,5 @@
 import pandas as pd
 from io import StringIO
-import streamlit as st
 
 students_locations = """
 name,latitude,longitude
@@ -30,7 +29,6 @@ Allegheny General Hospital,40.45697185,-80.003306882476
 Akron Children's Hospital,41.0792309,-81.525795801765
 """
 
-@st.cache_data
 def get_student_locations():
     df = pd.read_csv(StringIO(students_locations))
     return df.to_dict(orient='records')

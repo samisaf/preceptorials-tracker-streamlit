@@ -14,31 +14,11 @@ students = st.session_state.get("students", "")
 # Set the layout to wide mode
 st.set_page_config(layout="wide")
 
-# Display Info page
 st.title("Learners")
-
-# Create tabs based on the year field
-unique_years = students['year'].unique().tolist()
-unique_years = [str(int(u)) for u in unique_years if not np.isnan(u)]
-year_tabs = st.tabs(unique_years)
-
-# Display students based on the selected year tab
-for tab, year in zip(year_tabs, unique_years):
-    with tab:
-        year_students = students[students['year'] == int(year)][['first_name', 'last_name', 'institution']]
-        st.dataframe(year_students, hide_index=True, column_config={"first_name": "First Name", "last_name": "Last Name",  "institution": "Institution",} )
-
-# Display a map of the US with dots representing each institution
 st.subheader("Institutions Map")
 
 # Display a map of the US with dots representing each institution
 location_data = get_student_locations()
-
-# Convert institution_data into a list of dictionaries with 'latitude', 'longitude', and 'name' keys
-# location_data = [
-#     {"name": name, "latitude": location[0], "longitude": location[1]}
-#     for name, location in geolocations.items()
-# ]
 
 # Pydeck chart with tooltip showing institution name on hover
 st.pydeck_chart(pdk.Deck(
@@ -68,10 +48,18 @@ st.pydeck_chart(pdk.Deck(
     }
 ))
 
-st.write(location_data)
-# Ensure the user has provided a username, email, and password
 if access_token:
-    st.write(f"{access_token}")
+    # Create tabs based on the year field
+    unique_years = students['year'].unique().tolist()
+    unique_years = [str(int(u)) for u in unique_years if not np.isnan(u)]
+    year_tabs = st.tabs(unique_years)
+
+    # Display students based on the selected year tab
+    for tab, year in zip(year_tabs, unique_years):
+        with tab:
+            year_students = students[students['year'] == int(year)][['first_name', 'last_name', 'institution']]
+            st.dataframe(year_students, hide_index=True, column_config={"first_name": "First Name", "last_name": "Last Name",  "institution": "Institution",} )
+
 else:
     st.warning("Please go to the Welcome Screen to enter your information.")
 
