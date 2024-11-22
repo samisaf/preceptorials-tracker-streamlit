@@ -11,11 +11,7 @@ from util.geolocations import get_student_locations
 access_token = st.session_state.get("access_token", "")
 students = st.session_state.get("students", "")
 
-# Set the layout to wide mode
-st.set_page_config(layout="wide")
-
-st.title("Learners")
-st.subheader("Institutions Map")
+st.title("Where do our Learners Come From?")
 
 # Display a map of the US with dots representing each institution
 location_data = get_student_locations()
@@ -49,17 +45,7 @@ st.pydeck_chart(pdk.Deck(
 ))
 
 if access_token:
-    # Create tabs based on the year field
-    unique_years = students['year'].unique().tolist()
-    unique_years = [str(int(u)) for u in unique_years if not np.isnan(u)]
-    year_tabs = st.tabs(unique_years)
-
-    # Display students based on the selected year tab
-    for tab, year in zip(year_tabs, unique_years):
-        with tab:
-            year_students = students[students['year'] == int(year)][['first_name', 'last_name', 'institution']]
-            st.dataframe(year_students, hide_index=True, column_config={"first_name": "First Name", "last_name": "Last Name",  "institution": "Institution",} )
-
+    pass
 else:
     st.warning("Please go to the Welcome Screen to enter your information.")
 

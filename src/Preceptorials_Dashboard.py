@@ -1,11 +1,16 @@
 import streamlit as st
-from util.backend import authenticate, get_students, get_teachers, get_chapters
+from util.backend import authenticate, get_students, get_teachers, get_chapters, get_db
 import os
 # Create State Variables
 if "access_token" not in st.session_state: st.session_state["access_token"] = ""
+if "db" not in st.session_state: st.session_state["db"] = ""
+
 if "students" not in st.session_state: st.session_state["students"] = ""
 if "teachers" not in st.session_state: st.session_state["teachers"] = ""
 if "chapters" not in st.session_state: st.session_state["chapters"] = ""
+
+# Set the layout to wide mode
+st.set_page_config(layout="wide")
 
 st.write(
 """
@@ -29,6 +34,8 @@ if st.button("Submit") and (email and password):
         st.session_state["students"] = get_students(access_token)
         st.session_state["teachers"] = get_teachers(access_token)
         st.session_state["chapters"] = get_chapters(access_token)
+        st.session_state["db"] = get_db(access_token)
+
     except Exception as err:
             st.error(err)
 
