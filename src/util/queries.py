@@ -145,14 +145,14 @@ SELECT
     h.user_created_h, h.date_created_h, h.h_average
 FROM 
     students AS s
-LEFT JOIN a_aggregated AS a ON s.id = a.student
-LEFT JOIN b_aggregated AS b ON s.id = b.student
-LEFT JOIN c_aggregated AS c ON s.id = c.student
-LEFT JOIN d_aggregated AS d ON s.id = d.student
-LEFT JOIN e_aggregated AS e ON s.id = e.student
-LEFT JOIN f_aggregated AS f ON s.id = f.student
-LEFT JOIN g_aggregated AS g ON s.id = g.student
-LEFT JOIN h_aggregated AS h ON s.id = h.student;"""
+    FULL OUTER JOIN a_aggregated AS a ON s.id = a.student
+    FULL OUTER JOIN b_aggregated AS b ON s.id = b.student
+    FULL OUTER JOIN c_aggregated AS c ON s.id = c.student
+    FULL OUTER JOIN d_aggregated AS d ON s.id = d.student
+    FULL OUTER JOIN e_aggregated AS e ON s.id = e.student
+    FULL OUTER JOIN f_aggregated AS f ON s.id = f.student
+    FULL OUTER JOIN g_aggregated AS g ON s.id = g.student
+    FULL OUTER JOIN h_aggregated AS h ON s.id = h.student;"""
 
 # this query is not accurate as it doesn't adjust the denominator 
 queries_insert_total_score = """
