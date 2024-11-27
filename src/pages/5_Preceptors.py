@@ -13,8 +13,8 @@ st.title("Our Preceptors")
 
 # Ensure the user has provided a username, email, and password
 if access_token:
-    st.dataframe(teachers,
-                 column_config={"first_name": "First Name", "last_name": "Last Name", "email": "Email",
-                                "location": "Location", })
+    for _, row in teachers.iterrows():
+        st.write(f"- {row['first_name']} {row['last_name']}, {row['location']}")
+
 else:
     st.warning("Please go to the Welcome Screen to enter your information.")

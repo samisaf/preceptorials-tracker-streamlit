@@ -12,7 +12,7 @@ access_token = st.session_state.get("access_token", "")
 students = st.session_state.get("students", "")
 
 st.title("Where do our Learners Come From?")
-
+st.write("Zoom out to see our learners from across the world.")
 # Display a map of the US with dots representing each institution
 location_data = get_student_locations()
 
@@ -43,9 +43,4 @@ st.pydeck_chart(pdk.Deck(
         }
     }
 ))
-
-if access_token:
-    pass
-else:
-    st.warning("Please go to the Welcome Screen to enter your information.")
 
