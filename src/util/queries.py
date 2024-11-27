@@ -1,51 +1,53 @@
 # refer to https://github.com/samisaf/preceptorials-tracker-directus/blob/main/data_wrangle/calculate_average_score.ipynb
 
-queries_calculate_averages = """ALTER TABLE a ADD COLUMN a_average REAL;
+queries_calculate_averages = """
+ALTER TABLE a ADD COLUMN a_average REAL;
 
 
-UPDATE a SET a_average = (OhmsLaw + EquationOfMotion + Resistance + Compliance + NormalPressureControlWaveforms + PalvTimeCurve + Waveforms_with_changing_R_C_and_IT + InspiratoryTimeConstant + Effect_of_Flow_Asynchrony_on_Pressure_Breaths + Chapter_A_Cases + Plateau_Pressure + PVLoops_in_Pressure_Breaths) / 12;
+UPDATE a SET a_average = (COALESCE(OhmsLaw, 0) + COALESCE(EquationOfMotion, 0) + COALESCE(Resistance, 0) + COALESCE(Compliance, 0) + COALESCE(NormalPressureControlWaveforms, 0) + COALESCE(PalvTimeCurve, 0) + COALESCE(Waveforms_with_changing_R_C_and_IT, 0) + COALESCE(InspiratoryTimeConstant, 0) + COALESCE(Effect_of_Flow_Asynchrony_on_Pressure_Breaths, 0) + COALESCE(Chapter_A_Cases, 0) + COALESCE(Plateau_Pressure, 0) + COALESCE(PVLoops_in_Pressure_Breaths, 0)) / 12;
 
 
 ALTER TABLE b ADD COLUMN b_average REAL;
 
 
-UPDATE b SET b_average = (Measuring_Resistance_and_Compliance + Inspiratory_Time_Constant + PV_Loops_in_Volume_Breaths + Chapter_B_Cases + Waveforms_with_changing_R_C_and_IT + Effect_of_Flow_Asynchrony_on_Volume_Breaths + Inflection_Points_and_Stress_Index + PEEP_versus_Ppl_Curve) / 8;
+UPDATE b SET b_average = (COALESCE(Measuring_Resistance_and_Compliance, 0) + COALESCE(Inspiratory_Time_Constant, 0) + COALESCE(PV_Loops_in_Volume_Breaths, 0) + COALESCE(Chapter_B_Cases, 0) + COALESCE(Waveforms_with_changing_R_C_and_IT, 0) + COALESCE(Effect_of_Flow_Asynchrony_on_Volume_Breaths, 0) + COALESCE(Inflection_Points_and_Stress_Index, 0) + COALESCE(PEEP_versus_Ppl_Curve, 0)) / 8;
 
 
 ALTER TABLE c ADD COLUMN c_average REAL;
 
 
-UPDATE c SET c_average = (Paw_and_Palv_Time_Curves_in_Expiration + Flow_and_Volume_Time_Curves_in_Expiration + Adverse_Effects_of_AutoPEEP + Signs_of_AutoPEEP + Chapter_C_Cases + Natural_Decay_Equation + Expiratory_Time_Constant + Waveforms_with_changing_R_C_and_IT + Effect_of_Cycling_Asynchrony_During_Expiration) / 9;
+UPDATE c SET c_average = (COALESCE(Paw_and_Palv_Time_Curves_in_Expiration, 0) + COALESCE(Flow_and_Volume_Time_Curves_in_Expiration, 0) + COALESCE(Adverse_Effects_of_AutoPEEP, 0) + COALESCE(Signs_of_AutoPEEP, 0) + COALESCE(Chapter_C_Cases, 0) + COALESCE(Natural_Decay_Equation, 0) + COALESCE(Expiratory_Time_Constant, 0) + COALESCE(Waveforms_with_changing_R_C_and_IT, 0) + COALESCE(Effect_of_Cycling_Asynchrony_During_Expiration, 0)) / 9;
 
 
 ALTER TABLE d ADD COLUMN d_average REAL;
 
 
-UPDATE d SET d_average = (Waveforms_with_Changing_R_C + Waveforms_with_Patient_Effort + Effect_of_Changing_IT_for_Pressure_and_Volume_Cycled_Breaths + Chapter_D_Cases + Effect_of_AutoPEEP_on_PV_Cruve_in_P_and_V_Breaths + Physiologic_Determinants_of_PCO2) / 6;
+UPDATE d SET d_average = (COALESCE(Waveforms_with_Changing_R_C, 0) + COALESCE(Waveforms_with_Patient_Effort, 0) + COALESCE(Effect_of_Changing_IT_for_Pressure_and_Volume_Cycled_Breaths, 0) + COALESCE(Chapter_D_Cases, 0) + COALESCE(Effect_of_AutoPEEP_on_PV_Cruve_in_P_and_V_Breaths, 0) + COALESCE(Physiologic_Determinants_of_PCO2, 0)) / 6;
 
 
 ALTER TABLE e ADD COLUMN e_average REAL;
 
 
-UPDATE e SET e_average = (Triggering_Sensitivity + Ineffective_Triggering + Auto_Triggering) / 3;
+UPDATE e SET e_average = (COALESCE(Triggering_Sensitivity, 0) + COALESCE(Ineffective_Triggering, 0) + COALESCE(Auto_Triggering, 0)) / 3;
 
 
 ALTER TABLE f ADD COLUMN f_average REAL;
 
 
-UPDATE f SET f_average = (Chapter_F_Cases + Termination_of_Inspiration_for_Various_Breath_Types + Premature_Cycling + Delayed_Cycling) / 4;
+UPDATE f SET f_average = (COALESCE(Chapter_F_Cases, 0) + COALESCE(Termination_of_Inspiration_for_Various_Breath_Types, 0) + COALESCE(Premature_Cycling, 0) + COALESCE(Delayed_Cycling, 0)) / 4;
 
 
 ALTER TABLE g ADD COLUMN g_average REAL;
 
 
-UPDATE g SET g_average = (Work_of_Breathing_and_the_Campbell_Diagram + Diaphragmatic_Atrophy_and_Fatigue + Ventilator_Induced_Diaphragmatic_Dysfunction + Chapter_G_Cases) / 4;
+UPDATE g SET g_average = (COALESCE(Work_of_Breathing_and_the_Campbell_Diagram, 0) + COALESCE(Diaphragmatic_Atrophy_and_Fatigue, 0) + COALESCE(Ventilator_Induced_Diaphragmatic_Dysfunction, 0) + COALESCE(Chapter_G_Cases, 0)) / 4;
 
 
 ALTER TABLE h ADD COLUMN h_average REAL;
 
 
-UPDATE h SET h_average = (Patient_Work_of_Breathing_During_AC_SIMV_and_PS + Estimating_Pmus + Physiology_of_Proportional_Assist_Ventilation + Neurally_Adjusted_Ventilatory_Assistance) / 4;""".split('\n')
+UPDATE h SET h_average = (COALESCE(Patient_Work_of_Breathing_During_AC_SIMV_and_PS, 0) + COALESCE(Estimating_Pmus, 0) + COALESCE(Physiology_of_Proportional_Assist_Ventilation, 0) + COALESCE(Neurally_Adjusted_Ventilatory_Assistance, 0)) / 4;
+""".split('\n')
 
 query_create_join_learners = """
 CREATE TABLE IF NOT EXISTS learners AS

@@ -10,7 +10,7 @@ teachers = st.session_state.get("teachers", "")
 
 # st.set_page_config(layout="wide")
 st.title("Our Preceptors")
-
+st.write("Thanks to all of our preceptors for their dedication.")
 # Ensure the user has provided a username, email, and password
 if access_token:
     for _, row in teachers.iterrows():
