@@ -25,11 +25,10 @@ password = st.text_input("Enter Password", type="password")
 if st.button("Submit") and (email and password):
     try:
         access_token = authenticate(email, password)
-        st.success(f"You have been successfully authenticated.")
         st.session_state["access_token"] = access_token
-        st.session_state["learners"] = get_learners(access_token)
-        st.session_state["teachers"] = get_teachers(access_token)
 
     except Exception as err:
             st.error(err)
 
+if st.session_state["access_token"]:
+     st.success(f"You have been successfully authenticated.")

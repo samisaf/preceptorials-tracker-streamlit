@@ -38,11 +38,11 @@ column_config = {
 
 # Retrieve global state data
 access_token = st.session_state.get("access_token", "")
-learners = get_learners(access_token)
 
 st.title("Progress")
 
 if access_token:
+    learners = get_learners(access_token)
     # Subset the DataFrame
     filtered_learners = learners[columns_to_display]
     # Create tabs based on the year field
