@@ -1,15 +1,8 @@
 import streamlit as st
-import pandas as pd
-import numpy as np
 import pydeck as pdk
-import sys
-import os
-# adding parent directory to path in order to convert relative import to absolute import
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from util.geolocations import get_student_locations
 
 access_token = st.session_state.get("access_token", "")
-students = st.session_state.get("students", "")
 
 st.title("Where do our Learners Come From?")
 st.write("Zoom out to see our learners from across the world.")
@@ -17,7 +10,7 @@ st.write("Zoom out to see our learners from across the world.")
 location_data = get_student_locations()
 
 # Pydeck chart with tooltip showing institution name on hover
-st.pydeck_chart(pdk.Deck(
+deck = pdk.Deck(
     map_style='mapbox://styles/mapbox/light-v9',
     initial_view_state=pdk.ViewState(
         latitude=37.0902,  # Centered on the USA
@@ -42,5 +35,10 @@ st.pydeck_chart(pdk.Deck(
             "color": "white"
         }
     }
-))
+)
+
+if access_token:
+    st.pydeck_chart(deck)
+else:
+    st.warning("Please go to the Welcome Screen to enter your information.")
 

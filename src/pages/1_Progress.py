@@ -1,5 +1,4 @@
 import streamlit as st
-import pandas as pd
 import numpy as np
 from util.backend import get_learners
 
@@ -37,6 +36,7 @@ column_config = {
     "total_score": "Total Score"
 }   
 
+# Retrieve global state data
 access_token = st.session_state.get("access_token", "")
 learners = get_learners(access_token)
 

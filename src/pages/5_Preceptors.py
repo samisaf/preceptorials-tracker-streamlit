@@ -1,12 +1,11 @@
 import streamlit as st
 import sys
 import os
-# adding parent directory to path in order to convert relative import to absolute import
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from util.backend import get_teachers
 
 # Retrieve global state data
 access_token = st.session_state.get("access_token", "")
-teachers = st.session_state.get("teachers", "")
+teachers = get_teachers(access_token)
 
 # st.set_page_config(layout="wide")
 st.title("Our Preceptors")

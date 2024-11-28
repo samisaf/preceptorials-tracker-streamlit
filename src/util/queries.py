@@ -53,89 +53,138 @@ query_create_join_learners = """
 CREATE TABLE IF NOT EXISTS learners AS
 
 WITH
-    
-a_aggregated AS (
-    SELECT 
-        student,
-        MAX(user_created) AS user_created_a, 
-        MAX(date_created) AS date_created_a,
-        MAX(a_average) AS a_average
-    FROM a
-    GROUP BY student
-),
-    
-b_aggregated AS (
-    SELECT 
-        student,
-        MAX(user_created) AS user_created_b, 
-        MAX(date_created) AS date_created_b,
-        MAX(b_average) AS b_average
-    FROM b
-    GROUP BY student
-),
-    
-c_aggregated AS (
-    SELECT 
-        student,
-        MAX(user_created) AS user_created_c, 
-        MAX(date_created) AS date_created_c,
-        MAX(c_average) AS c_average
-    FROM c
-    GROUP BY student
-),
-    
-d_aggregated AS (
-    SELECT 
-        student,
-        MAX(user_created) AS user_created_d, 
-        MAX(date_created) AS date_created_d,
-        MAX(d_average) AS d_average
-    FROM d
-    GROUP BY student
-),
-    
-e_aggregated AS (
-    SELECT 
-        student,
-        MAX(user_created) AS user_created_e, 
-        MAX(date_created) AS date_created_e,
-        MAX(e_average) AS e_average
-    FROM e
-    GROUP BY student
-),
-    
-f_aggregated AS (
-    SELECT 
-        student,
-        MAX(user_created) AS user_created_f, 
-        MAX(date_created) AS date_created_f,
-        MAX(f_average) AS f_average
-    FROM f
-    GROUP BY student
-),
-    
-g_aggregated AS (
-    SELECT 
-        student,
-        MAX(user_created) AS user_created_g, 
-        MAX(date_created) AS date_created_g,
-        MAX(g_average) AS g_average
-    FROM g
-    GROUP BY student
-),
-    
-h_aggregated AS (
-    SELECT 
-        student,
-        MAX(user_created) AS user_created_h, 
-        MAX(date_created) AS date_created_h,
-        MAX(h_average) AS h_average
-    FROM h
-    GROUP BY student
-)
+    a_aggregated AS (
+        SELECT 
+            student,
+            user_created AS user_created_a,
+            date_created AS date_created_a,
+            a_average
+        FROM (
+            SELECT 
+                student, 
+                user_created, 
+                date_created, 
+                a_average,
+                ROW_NUMBER() OVER (PARTITION BY student ORDER BY a_average DESC) AS rnk
+            FROM a
+        ) AS ranked
+        WHERE rnk = 1
+    ),b_aggregated AS (
+        SELECT 
+            student,
+            user_created AS user_created_b,
+            date_created AS date_created_b,
+            b_average
+        FROM (
+            SELECT 
+                student, 
+                user_created, 
+                date_created, 
+                b_average,
+                ROW_NUMBER() OVER (PARTITION BY student ORDER BY b_average DESC) AS rnk
+            FROM b
+        ) AS ranked
+        WHERE rnk = 1
+    ),c_aggregated AS (
+        SELECT 
+            student,
+            user_created AS user_created_c,
+            date_created AS date_created_c,
+            c_average
+        FROM (
+            SELECT 
+                student, 
+                user_created, 
+                date_created, 
+                c_average,
+                ROW_NUMBER() OVER (PARTITION BY student ORDER BY c_average DESC) AS rnk
+            FROM c
+        ) AS ranked
+        WHERE rnk = 1
+    ),d_aggregated AS (
+        SELECT 
+            student,
+            user_created AS user_created_d,
+            date_created AS date_created_d,
+            d_average
+        FROM (
+            SELECT 
+                student, 
+                user_created, 
+                date_created, 
+                d_average,
+                ROW_NUMBER() OVER (PARTITION BY student ORDER BY d_average DESC) AS rnk
+            FROM d
+        ) AS ranked
+        WHERE rnk = 1
+    ),e_aggregated AS (
+        SELECT 
+            student,
+            user_created AS user_created_e,
+            date_created AS date_created_e,
+            e_average
+        FROM (
+            SELECT 
+                student, 
+                user_created, 
+                date_created, 
+                e_average,
+                ROW_NUMBER() OVER (PARTITION BY student ORDER BY e_average DESC) AS rnk
+            FROM e
+        ) AS ranked
+        WHERE rnk = 1
+    ),f_aggregated AS (
+        SELECT 
+            student,
+            user_created AS user_created_f,
+            date_created AS date_created_f,
+            f_average
+        FROM (
+            SELECT 
+                student, 
+                user_created, 
+                date_created, 
+                f_average,
+                ROW_NUMBER() OVER (PARTITION BY student ORDER BY f_average DESC) AS rnk
+            FROM f
+        ) AS ranked
+        WHERE rnk = 1
+    ),g_aggregated AS (
+        SELECT 
+            student,
+            user_created AS user_created_g,
+            date_created AS date_created_g,
+            g_average
+        FROM (
+            SELECT 
+                student, 
+                user_created, 
+                date_created, 
+                g_average,
+                ROW_NUMBER() OVER (PARTITION BY student ORDER BY g_average DESC) AS rnk
+            FROM g
+        ) AS ranked
+        WHERE rnk = 1
+    ),h_aggregated AS (
+        SELECT 
+            student,
+            user_created AS user_created_h,
+            date_created AS date_created_h,
+            h_average
+        FROM (
+            SELECT 
+                student, 
+                user_created, 
+                date_created, 
+                h_average,
+                ROW_NUMBER() OVER (PARTITION BY student ORDER BY h_average DESC) AS rnk
+            FROM h
+        ) AS ranked
+        WHERE rnk = 1
+    )
 SELECT 
     s.id AS student_id, s.email, s.first_name, s.last_name, 
-    s.institution, s.specialty, s.status,
+    s.institution, s.specialty,
     CAST(s.year AS INTEGER) AS year, -- Ensure year is an integer
     a.user_created_a, a.date_created_a, a.a_average,
     b.user_created_b, b.date_created_b, b.b_average,
@@ -147,14 +196,15 @@ SELECT
     h.user_created_h, h.date_created_h, h.h_average
 FROM 
     students AS s
-    FULL OUTER JOIN a_aggregated AS a ON s.id = a.student
-    FULL OUTER JOIN b_aggregated AS b ON s.id = b.student
-    FULL OUTER JOIN c_aggregated AS c ON s.id = c.student
-    FULL OUTER JOIN d_aggregated AS d ON s.id = d.student
-    FULL OUTER JOIN e_aggregated AS e ON s.id = e.student
-    FULL OUTER JOIN f_aggregated AS f ON s.id = f.student
-    FULL OUTER JOIN g_aggregated AS g ON s.id = g.student
-    FULL OUTER JOIN h_aggregated AS h ON s.id = h.student;"""
+    LEFT JOIN a_aggregated AS a ON s.id = a.student
+    LEFT JOIN b_aggregated AS b ON s.id = b.student
+    LEFT JOIN c_aggregated AS c ON s.id = c.student
+    LEFT JOIN d_aggregated AS d ON s.id = d.student
+    LEFT JOIN e_aggregated AS e ON s.id = e.student
+    LEFT JOIN f_aggregated AS f ON s.id = f.student
+    LEFT JOIN g_aggregated AS g ON s.id = g.student
+    LEFT JOIN h_aggregated AS h ON s.id = h.student;
+"""
 
 # this query is not accurate as it doesn't adjust the denominator 
 queries_insert_total_score = """
